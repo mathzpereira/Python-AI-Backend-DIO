@@ -9,6 +9,7 @@ Please choose an option:
 [d] Add a new client
 [e] Add a new account
 [f] Show client account list
+[g] Show all accounts
 [q] Exit"""
 
 def main():
@@ -39,7 +40,8 @@ def main():
             account_number = input('Enter the account number: ')
             account = Account.find_account(account_number)
             if account:
-                account._history.show_history()
+                for transaction in account._history.transactions_generator():
+                    print("Transaction:", transaction['type'], "| Value: R$", transaction['value'], "| Date:", transaction['date'], "\n")
             else:
                 print('Account not found')
 
@@ -76,10 +78,20 @@ def main():
             else:
                 print('Client not found')
 
+        elif option == 'g':
+            for acc in AccountIterator():
+                print("Account number:", acc._number, "| Balance: R$", acc._balance, "| Client:", acc._client._name, "\n")
+
         elif option == 'q':
             break
 
         else:
             print('Invalid option')
 
+def user():
+    user = Individual("Rua dos Bobos", "123", "Fulano", "01/01/2000")
+    account = Account.new_account(user, "22")
+    user.add_account(account)
+
+user()
 main()

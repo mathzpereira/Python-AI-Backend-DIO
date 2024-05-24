@@ -1,6 +1,16 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
+def log_decorator(func):
+        def wrapper(*args, **kwargs):
+            
+            result = func(*args, **kwargs)
+            
+            print("Transaction registered. Type:", result.__class__.__name__, "| Date:", datetime.now().strftime('%d-%m-%Y %H:%M:%S'), "\n")
+            
+            return result
+        
+        return wrapper
 
 class Account:
     _accounts = []
@@ -17,6 +27,7 @@ class Account:
         return self._balance
 
     @classmethod
+    @log_decorator
     def new_account(cls, client, number):
         return cls(number, client)
     
@@ -63,7 +74,8 @@ class CurrentAccount(Account):
 class History():
     def __init__(self):
         self._transactions = []
-
+    
+    @log_decorator
     def add_transaction(self, transaction):
         self._transactions.append(
             {
@@ -72,10 +84,23 @@ class History():
                 'date': datetime.now().strftime('%d-%m-%Y %H:%M:%S')
                 }
         )
+        return transaction
         
     def show_history(self):
         for transaction in self._transactions:
-            print(transaction)
+            print("Transaction:", transaction['type'], "| Value: R$", transaction['value'], "| Date:", transaction['date'], "\n")
+
+    def transactions_generator(self):
+        _history = self._transactions
+        filter = input("Enter the transaction type (D= Deposit/ W= Withdrawal/ A= Any): ")
+        if filter == 'D':
+            _history = [transaction for transaction in self._transactions if transaction['type'] == "Deposit"]
+        elif filter == 'W':
+            _history = [transaction for transaction in self._transactions if transaction['type'] == "Withdrawal"]
+        elif filter == 'A':
+            pass
+        for transaction in _history:
+            yield transaction
 
 class Transaction(ABC):
     @abstractmethod
@@ -114,9 +139,6 @@ class Client:
         self._accounts = []
         self._clients.append(self)
 
-    def make_transaction(self, transaction, account):
-        transaction.register(account)
-
     def add_account(self, account):
         self._accounts.append(account)
 
@@ -133,3 +155,17 @@ class Individual(Client):
             if client._cpf == cpf:
                 return client
         return None
+    
+class AccountIterator():
+    def __init__(self):
+        self._index = 0
+
+    def __iter__(self):
+        return self
+    
+    def __next__(self):
+        if self._index < len(Account._accounts):
+            account = Account._accounts[self._index]
+            self._index += 1
+            return account
+        raise StopIteration
