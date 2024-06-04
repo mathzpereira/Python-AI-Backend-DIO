@@ -1,0 +1,9 @@
+[23-05-2024 22:18:39] Function name: new_account | Args: (<class 'models.Account'>, <models.Individual object at 0x000002B49B1BB650>, '22') | Kwargs: {} | Returned value: <models.Account object at 0x000002B49B673E50>
+[23-05-2024 22:18:54] Function name: deposit | Args: (<models.Account object at 0x000002B49B673E50>, 100.0) | Kwargs: {} | Returned value: None
+[23-05-2024 22:19:25] Function name: new_account | Args: (<class 'models.Account'>, <models.Individual object at 0x0000019F29ABB650>, '22') | Kwargs: {} | Returned value: <models.Account object at 0x0000019F298F85D0>
+[23-05-2024 22:19:55] Function name: deposit | Args: (<models.Account object at 0x0000019F298F85D0>, 500.0) | Kwargs: {} | Returned value: True
+[23-05-2024 22:20:04] Function name: deposit | Args: (<models.Account object at 0x0000019F298F85D0>, -50.0) | Kwargs: {} | Returned value: False
+[23-05-2024 22:21:54] Function name: new_account | Args: (<class 'models.Account'>, <models.Individual object at 0x00000269297BB5D0>, '22') | Kwargs: {} | Returned value: Account number: 22 | Balance: R$0
+[23-05-2024 22:25:23] Function name: new_account | Args: (<class 'models.Account'>, <Individual: ('Fulano', '123')>, '22') | Kwargs: {} | Returned value: <models.Account object at 0x000001F2125F85D0>
+[23-05-2024 22:25:37] Function name: deposit | Args: (<models.Account object at 0x000001F2125F85D0>, 500.0) | Kwargs: {} | Returned value: True
+[23-05-2024 22:25:57] Function name: withdraw | Args: (<models.Account object at 0x000001F2125F85D0>, 200.0) | Kwargs: {} | Returned value: True

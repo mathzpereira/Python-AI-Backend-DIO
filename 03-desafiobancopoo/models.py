@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+from pathlib import Path
+
+ROOT_PATH = Path(__file__).parent
 
 def log_decorator(func):
         def wrapper(*args, **kwargs):
             
             result = func(*args, **kwargs)
             
-            print("Transaction registered. Type:", result.__class__.__name__, "| Date:", datetime.now().strftime('%d-%m-%Y %H:%M:%S'), "\n")
-            
+            with open(ROOT_PATH / 'log.txt', 'a') as log:
+                log.write(f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] Function name: {func.__name__} | Args: {args} | Kwargs: {kwargs} | Returned value: {result}\n")
             return result
         
         return wrapper
@@ -23,14 +26,12 @@ class Account:
         self._history = History()
         self._accounts.append(self)
 
-    def get_balance(self):
-        return self._balance
-
     @classmethod
     @log_decorator
     def new_account(cls, client, number):
         return cls(number, client)
     
+    @log_decorator
     def withdraw(self, value):
         if self._balance < value:
             print('Insufficient funds')
@@ -44,13 +45,16 @@ class Account:
             print('Invalid value')
             return False
         
+    @log_decorator
     def deposit(self, value):
         if value > 0:
             self._balance += value
             self._history.add_transaction(Deposit(value))
             print(f'Deposit: {value}')
+            return True
         else:
             print('Invalid value')
+            return False
 
     @classmethod
     def find_account(cls, number):
@@ -75,7 +79,6 @@ class History():
     def __init__(self):
         self._transactions = []
     
-    @log_decorator
     def add_transaction(self, transaction):
         self._transactions.append(
             {
@@ -148,6 +151,9 @@ class Individual(Client):
         self._cpf = cpf
         self._name = name
         self._birth_date = birth_date
+
+    def __repr__ (self) -> str:
+        return f"<{self.__class__.__name__}: ('{self._name}', '{self._cpf}')>"
 
     @classmethod
     def find_client(cls, cpf):

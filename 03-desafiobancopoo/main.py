@@ -12,6 +12,9 @@ Please choose an option:
 [g] Show all accounts
 [q] Exit"""
 
+ROOT_PATH = Path(__file__).parent
+log = open(ROOT_PATH / 'log.txt', 'a')
+
 def main():
 
     while True:
